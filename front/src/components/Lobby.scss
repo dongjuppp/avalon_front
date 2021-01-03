@@ -1,0 +1,30 @@
+.make-button{
+    width: 650px;
+    height: 100px;
+    border: none;
+    display: block;
+    margin: 3px;
+    font-size: 15px;
+    background-color: blueviolet;
+    
+    @media screen and (max-width:768px) {
+        width: 350px;
+        height: 90px;
+    }
+}
+
+.refresh{
+    width: 650px;
+    height: 100px;
+    border: none;
+    display: block;
+    margin: 3px;
+    font-size: 15px;
+    background-color: bisque;
+    
+    @media screen and (max-width:768px) {
+        width: 350px;
+        height: 90px;
+    }
+}
+

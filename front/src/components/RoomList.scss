@@ -1,0 +1,11 @@
+.list{
+    overflow: scroll;
+
+    width: 652px;
+    height: 600px;
+
+    @media screen and (max-width:768px){
+        width: 350px;
+        height: 400px;
+    }
+}
