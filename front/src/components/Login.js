@@ -28,10 +28,7 @@ const Login = ({history}) => {
             console.log(`응답은: ${response.data}`)
 
             if(response.data==='success'){
-                window.sessionStorage.setItem('userInfo', {
-                    id:id,
-                    pwd:pwd
-                })
+                window.sessionStorage.setItem('userInfo',id)
                 console.log('로비로이동!')
                 history.push('/lobby')
             }

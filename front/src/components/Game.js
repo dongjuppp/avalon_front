@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useState,useMemo } from "react";
 import "./Game.scss";
 import morgana from "../img/mor.jpg";
 import merlin from "../img/merlin.jpg";
@@ -6,20 +6,27 @@ import Character from "./Character";
 import Stomp from 'stompjs';
 import SockJs from 'sockjs-client';
 import qs from "qs";
+
 //import axios from "axios";
 
 const Game = ({ location, history }) => {
+  
+  const userId=window.sessionStorage.getItem('userInfo')
+  if(!userId){
+    history.push('/')
+  }
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
   const roomId = query.roomId;
-  
   //const rule = query.rule;
-  const sock=new SockJs('http://localhost:8080/websocket');
-  const client=Stomp.over(sock)
+  const url='http://localhost:8080/websocket';
+   
+  const client=useMemo(()=>{return Stomp.over(new SockJs(url))},[url])
   
   
   const [msg,setMsg]=useState('');
+  
  
 
   const pressEnter=(e)=>{
@@ -33,20 +40,30 @@ const Game = ({ location, history }) => {
   }
 
   const sendChattingMsg=()=>{
-    client.send('/app/template',{},JSON.stringify({msg:msg,roomId:roomId}))
+    //console.log('wewe')
+    client.send('/app/chatting',{},JSON.stringify({userId:userId,msg:msg,roomId:roomId}))
+    
+    client.subscribe('/topic/chatting/'+roomId,function (data){
+      //setMsgList([...msgList,data.body])
+      //const area=document.getElementById('area')
+      const msgList=document.getElementById('msgList')
+      //console.log(area)
+      const li=document.createElement('li')
+      li.innerHTML=data.body
+      msgList.appendChild(li);            
+    })
+
     setMsg('')
   }
 
-  
-
   useEffect(() => {
-    client.connect({},function (frame){  
-      client.subscribe('/topic/template',function (data){
-        //console.log(data.body);
-      })
+    client.debug=null
+    client.connect({},function (){  
+      
     })
-  },[client]);
+  },[client,roomId]);
 
+  
 
 
   const choied = {
@@ -69,6 +86,9 @@ const Game = ({ location, history }) => {
             <Character image={merlin} />
           </div>
           <div className="chatting">
+          <div id='area' className='message-area'>
+             <li id='msgList'></li>
+            </div>
           <div className='chatting-area'>
             <input className="chatting-input" value={msg}  type="text" onChange={chattingInput} onKeyPress={pressEnter}/>
               <input type="submit" value="입력" onClick={sendChattingMsg}/>
