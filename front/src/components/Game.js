@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import "./Game.scss";
-import morgana from "../img/mor.jpg";
-import merlin from "../img/merlin.jpg";
-import Character from "./Character";
 import qs from "qs";
 import socket from "./GameSocket";
-
+import CharacterList from "./CharacterList";
 //import axios from "axios";
 
 const Game = ({ location, history }) => {
@@ -13,18 +10,24 @@ const Game = ({ location, history }) => {
   if (!userId) {
     history.push("/");
   }
+  const sign='1'
   const query = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
   const roomId = query.roomId;
+
+  const [msg, setMsg] = useState("");
+  const [userList,setUserList]=useState([]);
   const { GameSocket, client } = socket;
-  document.addEventListener("DOMContentLoaded", () => {
-    GameSocket(roomId);
-  });
+  window.addEventListener('DOMContentLoaded', function(){
+    console.log('DOMContentLoaded');
+    GameSocket(roomId,userList,setUserList);
+})
 
   //const rule = query.rule;
 
-  const [msg, setMsg] = useState("");
+ 
+  
 
   const pressEnter = (e) => {
     if (e.key === "Enter") {
@@ -42,28 +45,24 @@ const Game = ({ location, history }) => {
       {},
       JSON.stringify({ userId: userId, msg: msg, roomId: roomId })
     );
-
+      console.log(roomId)
     setMsg("");
   };
 
-  const choied = {
-    border: "5px solid red",
-  };
+  // const choied = {
+  //   border: "5px solid red",
+  // };
 
-  const crown = {
-    border: "5px solid green",
-  };
+  // const crown = {
+  //   border: "5px solid green",
+  // };
   return (
     <>
+    <div style={{display:'none'}}>{sign}</div>
       <div className="game">
         <div className="upper">
           <div className="character-box">
-            <Character image={morgana} clicked={crown} />
-            <Character image={merlin} clicked={choied} />
-            <Character image={merlin} clicked={crown} />
-            <Character image={merlin} clicked={crown} />
-            <Character image={merlin} clicked={crown} />
-            <Character image={merlin} />
+            <CharacterList userList={userList}/>            
           </div>
           <div className="chatting">
           
@@ -94,7 +93,10 @@ const Game = ({ location, history }) => {
           </div>
         </div>
       </div>
+     
     </>
+
+    
   );
 };
 

@@ -1,6 +1,7 @@
 import React,{useReducer,useEffect} from 'react';
 import './Room.scss';
-import {Link} from 'react-router-dom';
+import axios from 'axios';
+// import {Link} from 'react-router-dom';
 
 function reducer(state,action){
     switch(action.type){
@@ -38,7 +39,7 @@ const Room = ({room}) => {
     const [state,dispatch]=useReducer(reducer,'sd');
     const {roomName,rule,roomId}=room
     const path=`/game?roomId=${roomId}&rule=${rule}`
-
+    const confirmPath=`/isMax?roomId=${roomId}`
     const getString=()=>{
         dispatch({type:rule});
         return state;
@@ -47,12 +48,43 @@ const Room = ({room}) => {
     useEffect(()=>{
         getString()
     })
+
+
+
+    const moveRoom=()=>{
+
+        const isMax= async()=>{
+            console.log(roomId)
+            try{
+                const response= await axios.get(confirmPath);
+            console.log(response.data)
+            if(response.data==='full'){
+                alert('풀방입니다')
+            }
+            else if(response.data==='max'){
+                alert('게임이 시작되어서 입장할 수 없습니다')
+            }
+            else{
+                window.location.href=path
+            }
+            }catch(e){
+                console.log(e)
+            }
+        }
+        isMax()
+    }
     
     return (
         <>
-        <Link to={path}>
+        {/* <Link to={path}>
         <button className='list-button'>방제:{roomName}
-        <br/>룰:{state}</button></Link></>
+        <br/>룰:{state}</button></Link> */}
+        
+        <button onClick={moveRoom} className='list-button'>방제:{roomName}
+        <br/>룰:{state}</button>
+        
+        
+        </>
     );
 };
 

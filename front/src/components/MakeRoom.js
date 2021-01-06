@@ -24,7 +24,8 @@ const MakeRoom = ({history}) => {
         const response = await axios.post('/makeRoom',{rule:rule,roomName:roomName});
         
         if(response.data!=='fail'){
-          history.push(`/game?roomId=${response.data}&rule=${rule}`);
+          window.location.href=`/game?roomId=${response.data}&rule=${rule}`;
+          //history.push(`/game?roomId=${response.data}&rule=${rule}`);
           
         }
         else{
