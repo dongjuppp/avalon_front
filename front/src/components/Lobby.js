@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Lobby.scss";
-import {Link} from 'react-router-dom'
 import RoomList from "./RoomList";
 
 const Lobby = ({ history }) => {
@@ -11,12 +10,16 @@ const Lobby = ({ history }) => {
     history.push("/");
   }
 
+  const move=()=>{
+    history.push('/makeRoom')
+  }
+
   return (
     <div>
       <RoomList sign={sign} />
-      <Link to='/makeRoom'>
-      <button className="make-button">방만들기</button>
-      </Link>
+      <div>
+       <button onClick={move} className="make-button">방만들기</button>
+      </div>
       <button
         className="refresh"
         onClick={() => {

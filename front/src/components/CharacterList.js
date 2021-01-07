@@ -3,7 +3,7 @@ import Character from './Character';
 
 
 const CharacterList = (list) => {
-    console.log(list.userList)
+    //console.log(list.userList)
     //const [userList,setUserList]=useState([...list.userList]);
     // console.log('Eldyd')
      //console.log(userList)

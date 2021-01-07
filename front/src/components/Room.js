@@ -39,7 +39,8 @@ const Room = ({room}) => {
     const [state,dispatch]=useReducer(reducer,'sd');
     const {roomName,rule,roomId}=room
     const path=`/game?roomId=${roomId}&rule=${rule}`
-    const confirmPath=`/isMax?roomId=${roomId}`
+    const userId=window.sessionStorage.getItem('userInfo');
+    const confirmPath=`/isMax?roomId=${roomId}&userId=${userId}`;
     const getString=()=>{
         dispatch({type:rule});
         return state;
@@ -64,6 +65,9 @@ const Room = ({room}) => {
             else if(response.data==='max'){
                 alert('게임이 시작되어서 입장할 수 없습니다')
             }
+            else if(response.data==='duplication'){
+                alert('재입장이 불가합니다')
+            }
             else{
                 window.location.href=path
             }
@@ -75,14 +79,9 @@ const Room = ({room}) => {
     }
     
     return (
-        <>
-        {/* <Link to={path}>
-        <button className='list-button'>방제:{roomName}
-        <br/>룰:{state}</button></Link> */}
-        
+        <>        
         <button onClick={moveRoom} className='list-button'>방제:{roomName}
-        <br/>룰:{state}</button>
-        
+        <br/>룰:{state}</button>      
         
         </>
     );

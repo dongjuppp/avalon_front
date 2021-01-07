@@ -20,13 +20,13 @@ const MakeRoom = ({history}) => {
     }
     else{
       try{
-        console.log(`룰:${rule} 방제:${roomName}`)
-        const response = await axios.post('/makeRoom',{rule:rule,roomName:roomName});
+        // console.log(`룰:${rule} 방제:${roomName}`)
+        const roomMaker=window.sessionStorage.getItem('userInfo')
+        const response = await axios.post('/makeRoom',{rule:rule,roomName:roomName,roomMaker:roomMaker});
         
         if(response.data!=='fail'){
           window.location.href=`/game?roomId=${response.data}&rule=${rule}`;
           //history.push(`/game?roomId=${response.data}&rule=${rule}`);
-          
         }
         else{
           setMsg(<div>방만들기에 실패하였습니다</div>)

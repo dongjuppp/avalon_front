@@ -20,17 +20,31 @@ const GameSocket = (roomId, userList, setUserList) => {
   client.connect({}, function (frame) {
     console.log("커넥트 실행");
     client.subscribe("/topic/chatting/" + roomId, function (data) {
-      console.log("메세지 소켓 실행");
+      //console.log("메세지 소켓 실행");
       printMsg(data.body, "black");
     });
 
     client.subscribe("/topic/whoEntry" + roomId, function (data) {
       const info = JSON.parse(data.body);
-      console.log(info);
+      //console.log(info);
 
       setUserList(info.users);
       printMsg(info.msg, "red");
     });
+
+    client.subscribe("/topic/exit"+roomId,function (data){
+      const info=JSON.parse(data.body);
+
+      if(info.msg==='success'){
+        alert(`${info.userId}가 게임에서 나가 게임이 종료되었습니다`,'red')
+        client.disconnect()
+        window.location.href='/';
+      }
+    })
+    client.subscribe("/topic/exitFail/"+roomId+'/'+userId,function (data){
+      const info=data.body;
+      printMsg(info,'red');
+    })
 
     client.send(
       "/app/whoEntry",

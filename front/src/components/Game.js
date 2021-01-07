@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useCallback,useMemo } from "react";
 import "./Game.scss";
 import qs from "qs";
 import socket from "./GameSocket";
@@ -11,20 +11,28 @@ const Game = ({ location, history }) => {
     history.push("/");
   }
   const sign='1'
-  const query = qs.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
-  const roomId = query.roomId;
+  const query= useMemo(()=>{
+    return qs.parse(location.search, {
+      ignoreQueryPrefix: true,
+    })
+  },[location])
+  
+  //const roomState=0; //0대기, 1시작 
+  
+  const roomId = useMemo(()=>{return query.roomId},[query]);
+  
 
   const [msg, setMsg] = useState("");
+
   const [userList,setUserList]=useState([]);
+
   const { GameSocket, client } = socket;
   window.addEventListener('DOMContentLoaded', function(){
     console.log('DOMContentLoaded');
     GameSocket(roomId,userList,setUserList);
 })
 
-  //const rule = query.rule;
+  const rule = query.rule;
 
  
   
@@ -45,17 +53,18 @@ const Game = ({ location, history }) => {
       {},
       JSON.stringify({ userId: userId, msg: msg, roomId: roomId })
     );
-      console.log(roomId)
+      //console.log(roomId)
     setMsg("");
   };
 
-  // const choied = {
-  //   border: "5px solid red",
-  // };
+  const exit=useCallback(()=>{
+    client.send('/app/exit',{},JSON.stringify({userId:userId,roomId:roomId}));
+  },[userId,roomId,client])
 
-  // const crown = {
-  //   border: "5px solid green",
-  // };
+  const start=()=>{
+    client.send('/app/start',{},JSON.stringify({roomId:roomId,userId:userId,rule:rule}));
+  }
+  
   return (
     <>
     <div style={{display:'none'}}>{sign}</div>
@@ -86,10 +95,10 @@ const Game = ({ location, history }) => {
           <div className="game-button-area">
             <button className="game-button">성공</button>
             <button className="game-button">찬성</button>
-            <button className="game-button">시작</button>
+            <button onClick={start} className="game-button">시작</button>
             <button className="game-button">실패</button>
             <button className="game-button">반대</button>
-            <button className="game-button">나가기</button>
+            <button onClick={exit} className="game-button">나가기</button>
           </div>
         </div>
       </div>
