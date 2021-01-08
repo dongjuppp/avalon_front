@@ -1,4 +1,4 @@
-import React, { useState,useCallback,useMemo } from "react";
+import React, { useState,useCallback,useMemo,useRef } from "react";
 import "./Game.scss";
 import qs from "qs";
 import socket from "./GameSocket";
@@ -10,6 +10,7 @@ const Game = ({ location, history }) => {
   if (!userId) {
     history.push("/");
   }
+  let turnNumber=useRef(1);
   const sign='1'
   const query= useMemo(()=>{
     return qs.parse(location.search, {
@@ -20,7 +21,7 @@ const Game = ({ location, history }) => {
   //const roomState=0; //0대기, 1시작 
   
   const roomId = useMemo(()=>{return query.roomId},[query]);
-  
+  window.sessionStorage.setItem("roomId",roomId)
 
   const [msg, setMsg] = useState("");
 
@@ -29,7 +30,7 @@ const Game = ({ location, history }) => {
   const { GameSocket, client } = socket;
   window.addEventListener('DOMContentLoaded', function(){
     console.log('DOMContentLoaded');
-    GameSocket(roomId,userList,setUserList);
+    GameSocket(roomId,userList,setUserList,turnNumber);
 })
 
   const rule = query.rule;
@@ -71,7 +72,7 @@ const Game = ({ location, history }) => {
       <div className="game">
         <div className="upper">
           <div className="character-box">
-            <CharacterList userList={userList}/>            
+            <CharacterList client={client} userList={userList}/>            
           </div>
           <div className="chatting">
           

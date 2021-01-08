@@ -15,7 +15,7 @@ const printMsg = (msg, color = "black") => {
   scrollingElement.scrollTop = scrollingElement.scrollHeight;
 };
 
-const GameSocket = (roomId, userList, setUserList) => {
+const GameSocket = (roomId, userList, setUserList,turnNumber) => {
   console.log("게임 소캣 실행");
   client.connect({}, function (frame) {
     console.log("커넥트 실행");
@@ -27,7 +27,7 @@ const GameSocket = (roomId, userList, setUserList) => {
     client.subscribe("/topic/whoEntry" + roomId, function (data) {
       const info = JSON.parse(data.body);
       //console.log(info);
-
+      
       setUserList(info.users);
       printMsg(info.msg, "red");
     });
@@ -46,11 +46,32 @@ const GameSocket = (roomId, userList, setUserList) => {
       printMsg(info,'red');
     })
 
+    client.subscribe("/topic/start"+roomId+'/'+userId,function (data){
+      const list=JSON.parse(data.body);
+      const images=list.images;
+      const users=list.users;
+           
+      let userList=[]
+      for(let i=0;i<images.length;i++){
+        
+        userList.push(
+          {
+            userId:users[i],
+            image:images[i]
+          }
+        )
+      }
+      printMsg(list.msg,'red')
+      setUserList(userList);
+    })
+
     client.send(
       "/app/whoEntry",
       {},
       JSON.stringify({ userId: userId, roomId: roomId })
     );
+
+    
   });
 };
 
