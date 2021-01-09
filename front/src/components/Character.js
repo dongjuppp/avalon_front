@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import que from '../img/que.png'
 import assassinn from '../img/assassin.jpg';
 import merlin from '../img/merlin.jpg';
@@ -12,7 +12,7 @@ import normalgood3 from '../img/normalgood3.jpg';
 import normalgood4 from '../img/normalgood4.jpg';
 import oberon from '../img/oberon.jpg';
 import par from '../img/par.png';
-import { client } from 'stompjs';
+//import { client } from 'stompjs';
 
 
 function change(image){
@@ -48,31 +48,50 @@ function change(image){
     }
 }
 
-const Character = ({client,userId,image,isTurn}) => {
+const Character = ({client,userId,image,check}) => {
     const myId=window.sessionStorage.getItem("userInfo")
     let turn={
-        border:'solid 5px green'
+        color:'green',
+        backgroundColor:'red'
     }
-    // if(!isTurn){
-    //     turn=null;
-    // }
-    const [clicked,setClicked]=useState(false);
+    
+    //const [clicked,setClicked]=useState(false);
 
     const onClick=()=>{
-        console.log(clicked)
-        //const roomId=window.sessionStorage.getItem("roomId")
-        //client.send("/app/choice",{},JSON.stringify({choiceId:userId,userId:myId,roomId:roomId}))
-        setClicked(!clicked)
+        const nowTurnId=window.sessionStorage.getItem("nowTurnId");
+        console.log(`${nowTurnId}`)
+        if(nowTurnId!==null){
+            if(nowTurnId===myId){
+                const roomId=window.sessionStorage.getItem("roomId")
+                client.send("/app/choice",{},JSON.stringify({choiceId:userId,userId:myId,roomId:roomId}))
+            }
+        }
+        
+        
+        //setClicked(!clicked)
     }
 
-    let show=<img onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
-    const showClick=<img style={turn} onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
-    return (
-        <div className='character'>
-            {clicked ? show:showClick}
-            <div className='identity'>{userId}</div>
-        </div>        
-    );
+    let show=<div className='character'>
+    <img onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
+    <div className='identity'>{userId}</div>
+</div> 
+
+    const showClick=<div className='character'>
+    <img onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
+    <div style={turn} className='identity'>{userId}</div>
+</div> 
+
+    if(check===null){
+        return <div className='character'>
+        <img onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
+        <div className='identity'>{userId}</div>
+    </div> 
+    }
+
+    return check ? showClick:show;
+        
+              
+    
 };
 
 export default Character;

@@ -12,7 +12,7 @@ const CharacterList = (list) => {
         <>
         <div>
             {list.userList.map((user,index)=>(
-                <Character client={list.client} isTurn={user.isTurn} userId={user.userId} image={user.image} key={index}/>
+                <Character check={user.check} client={list.client} isTurn={user.isTurn} userId={user.userId} image={user.image} key={index}/>
             ))}
         </div>
        
