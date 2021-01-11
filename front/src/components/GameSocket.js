@@ -27,7 +27,7 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
     client.subscribe("/topic/whoEntry" + roomId, function (data) {
       const info = JSON.parse(data.body);
       //console.log(info);
-      window.sessionStorage.setItem('state','0')
+      window.sessionStorage.setItem('state','Init')
       setUserList(info.users);
       printMsg(info.msg, "red");
     });
@@ -50,7 +50,12 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
     client.subscribe("/topic/expeditionMemberFull/"+roomId, function (data){
       const msg=data.body;
       printMsg(msg,'red');
-      window.sessionStorage.setItem('state','2');
+      window.sessionStorage.setItem('state','choiceComplete');
+    })
+
+    client.subscribe("/topic/expeditionMsg/"+roomId,function (data){
+      const msg=data.body;
+      printMsg(msg,'red');
     })
 
     client.subscribe("/topic/start"+roomId+'/'+userId,function (data){
@@ -59,7 +64,7 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
       const users=list.users;
       const nowTurnId=list.nowTurnId;
       window.sessionStorage.setItem("nowTurnId",nowTurnId);
-      window.sessionStorage.setItem("state",'1');
+      window.sessionStorage.setItem("state",'Choice');
       let userList=[]
       for(let i=0;i<images.length;i++){
         
@@ -76,7 +81,6 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
 
     client.subscribe("/topic/choice/"+roomId+"/"+userId,function (data){
       const list=JSON.parse(data.body);
-      console.log(list)
       const checked=list.checked;
       const images=list.images;
       const users=list.users;
