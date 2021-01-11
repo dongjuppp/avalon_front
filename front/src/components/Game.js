@@ -63,7 +63,18 @@ const Game = ({ location, history }) => {
   },[userId,roomId,client])
 
   const start=()=>{
-    client.send('/app/start',{},JSON.stringify({roomId:roomId,userId:userId,rule:rule}));
+    const confirm=window.sessionStorage.getItem('state');
+    if(confirm==='0') //시작전 
+      client.send('/app/start',{},JSON.stringify({roomId:roomId,userId:userId,rule:rule}));
+    else if(confirm==='1'){ //원정대 인원선정
+      client.send('/app/expeditionMemberFull',{},JSON.stringify({roomId:roomId,userId:userId}))
+    }
+    else if(confirm==='2'){ //찬반투표
+      
+    }
+    else if(confirm==='3'){// 원정 성공/실패 투표
+
+    }
   }
   
   return (
@@ -96,7 +107,7 @@ const Game = ({ location, history }) => {
           <div className="game-button-area">
             <button className="game-button">성공</button>
             <button className="game-button">찬성</button>
-            <button onClick={start} className="game-button">시작</button>
+            <button onClick={start} className="game-button">시작/확정</button>
             <button className="game-button">실패</button>
             <button className="game-button">반대</button>
             <button onClick={exit} className="game-button">나가기</button>
