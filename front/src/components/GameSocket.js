@@ -62,9 +62,20 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
       const res=JSON.parse(data.body);
       printMsg(res.msg,'red');
       if(res.result===1){
-        window.sessionStorage.setItem('state','Expedition')
+        window.sessionStorage.setItem('state','Expedition'); //원정대 출발
       }
-      else window.sessionStorage.setItem('state','Choice');
+      else window.sessionStorage.setItem('state','Choice'); //원정대 다시 선정
+    })
+
+    client.subscribe("/topic/voteWinLose/"+roomId,function (data){
+      const res=data.body;
+      printMsg(res,'red');
+    })
+
+    client.subscribe("/topic/expeditionEnd/"+roomId,function (data){
+      const res=data.body;
+      window.sessionStorage.setItem('state','Choice')
+      printMsg(res,'red');
     })
 
     client.subscribe("/topic/initImage/"+roomId+'/'+userId,function (data){

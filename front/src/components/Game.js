@@ -77,11 +77,32 @@ const Game = ({ location, history }) => {
       if(nowTurnId===userId)
         client.send('/app/prosAndConsEnd',{},JSON.stringify({roomId:roomId,userId:userId}));
     }
-    else if(confirm==='Expedition'){// 원정 성공/실패 투표
-
+    else if(confirm==='Expedition'){// 원정 성공/실패끝나면 방장이 누를것
+        //원정대 투표가 끝나면 누르는것
+        client.send('/app/expeditionEnd',{},JSON.stringify({roomId:roomId,userId:userId}));
     }
   }
 
+  //원정 성공/실패
+  const expeditionWin=useCallback((num)=>{
+    const nowState=window.sessionStorage.getItem('state');
+    console.log('성공띠')
+    console.log(nowState)
+    if(nowState==='Expedition'){
+      if(num===0){
+        console.log('성공버튼')
+        client.send('/app/expeditionWin',{},JSON.stringify({roomId:roomId,userId:userId}))
+      }
+      else{
+        console.log('실패버튼')
+        client.send('/app/expeditionLose',{},JSON.stringify({roomId:roomId,userId:userId}))
+      }
+      
+    }
+  },[client,roomId,userId])
+
+
+  //원정대 보내기 찬성/반대
   const expeditionAgree=useCallback(()=>{
     const nowState=window.sessionStorage.getItem('state');
     if(nowState==='choiceComplete'){
@@ -127,10 +148,10 @@ const Game = ({ location, history }) => {
         <div className="lower">
           <div className="situation"></div>
           <div className="game-button-area">
-            <button className="game-button">성공</button>
+            <button onClick={()=>{expeditionWin(0)}} className="game-button">성공</button>
             <button onClick={expeditionAgree} className="game-button">찬성</button>
             <button onClick={start} className="game-button">시작/확정</button>
-            <button className="game-button">실패</button>
+            <button onClick={()=>{expeditionWin(1)}} className="game-button">실패</button>
             <button onClick={expeditionDisAgree} className="game-button">반대</button>
             <button onClick={exit} className="game-button">나가기</button>
           </div>
