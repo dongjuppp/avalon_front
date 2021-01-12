@@ -64,15 +64,20 @@ const Game = ({ location, history }) => {
 
   const start=()=>{
     const confirm=window.sessionStorage.getItem('state');
+    const nowTurnId=window.sessionStorage.getItem('nowTurnId');
+    console.log(confirm)
+    console.log(nowTurnId)
     if(confirm==='Init') //시작전 
       client.send('/app/start',{},JSON.stringify({roomId:roomId,userId:userId,rule:rule}));
     else if(confirm==='Choice'){ //원정대 인원선정
-      client.send('/app/expeditionMemberFull',{},JSON.stringify({roomId:roomId,userId:userId}))
+      if(nowTurnId===userId)
+        client.send('/app/expeditionMemberFull',{},JSON.stringify({roomId:roomId,userId:userId}))
     }
-    else if(confirm==='choiceComplete'){ //찬반투표
-
+    else if(confirm==='choiceComplete'){ //찬반투표 끝나야 누를 수 있는 것
+      if(nowTurnId===userId)
+        client.send('/app/prosAndConsEnd',{},JSON.stringify({roomId:roomId,userId:userId}));
     }
-    else if(confirm==='3'){// 원정 성공/실패 투표
+    else if(confirm==='Expedition'){// 원정 성공/실패 투표
 
     }
   }

@@ -58,6 +58,34 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
       printMsg(msg,'red');
     })
 
+    client.subscribe("/topic/prosAndConsResult/"+roomId,function(data){
+      const res=JSON.parse(data.body);
+      printMsg(res.msg,'red');
+      if(res.result===1){
+        window.sessionStorage.setItem('state','Expedition')
+      }
+      else window.sessionStorage.setItem('state','Choice');
+    })
+
+    client.subscribe("/topic/initImage/"+roomId+'/'+userId,function (data){
+      const list=JSON.parse(data.body);
+      const images=list.images;
+      const users=list.users;
+      const nowTurnId=list.nowTurnId;
+      window.sessionStorage.setItem("nowTurnId",nowTurnId)
+      let userList=[]
+
+      for(let i=0;i<images.length;i++){
+        userList.push(
+          {
+            userId:users[i],
+            image:images[i]
+          }
+        )
+      }
+      setUserList(userList);
+    })
+
     client.subscribe("/topic/start"+roomId+'/'+userId,function (data){
       const list=JSON.parse(data.body);
       const images=list.images;
