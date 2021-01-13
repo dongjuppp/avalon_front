@@ -15,7 +15,7 @@ const printMsg = (msg, color = "black") => {
   scrollingElement.scrollTop = scrollingElement.scrollHeight;
 };
 
-const GameSocket = (roomId, userList, setUserList,turnNumber) => {
+const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSubRound) => {
   console.log("게임 소캣 실행");
   client.connect({}, function (frame) {
     console.log("커넥트 실행");
@@ -78,6 +78,24 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
       printMsg(res,'red');
     })
 
+    client.subscribe("/topic/endImage/"+roomId,function(data){
+      const list=JSON.parse(data.body);
+      const images=list.images;
+      const users=list.users;
+
+      let userList=[]
+
+      for(let i=0;i<images.length;i++){
+        userList.push(
+          {
+            userId:users[i],
+            image:images[i]
+          }
+        )
+      }
+      setUserList(userList);
+    })
+
     client.subscribe("/topic/initImage/"+roomId+'/'+userId,function (data){
       const list=JSON.parse(data.body);
       const images=list.images;
@@ -95,6 +113,25 @@ const GameSocket = (roomId, userList, setUserList,turnNumber) => {
         )
       }
       setUserList(userList);
+    })
+
+    client.subscribe("/topic/roundInfo/"+roomId,function (data){
+      
+      const info=JSON.parse(data.body)
+      const mainRound=info.mainRound;
+      const subRound=info.subRound;
+      
+      setMainround(mainRound);
+      setSubRound(subRound);
+    })
+
+    client.subscribe("/topic/endSign/"+roomId,function (data){
+      const res=JSON.parse(data.body);
+      if(res.userId){
+        window.sessionStorage.setItem("nowTurnId",res.userId);
+        window.sessionStorage.setItem("state","AssassinChoice");
+      }
+      printMsg(res.msg,'green')
     })
 
     client.subscribe("/topic/start"+roomId+'/'+userId,function (data){

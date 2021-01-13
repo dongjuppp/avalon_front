@@ -107,6 +107,39 @@ body {
     .situation {
       height: 100%;
       width: 45%;
+
+      .roundArea{
+        height: 95%;
+        .mainRoundArea{
+          height: 80%;
+          // background-color: ivory;
+          
+          .mainRound{
+            display: inline-block;
+            height: 100%;
+            width: 20%;
+
+            img{
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+        .subRoundArea{
+          height: 20%;
+          
+          .subRound{
+            display: inline-block;
+            height: 100%;
+            width: 20%;
+
+            img{
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
       //background-color: black;
     }
     .game-button-area {

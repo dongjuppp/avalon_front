@@ -3,6 +3,7 @@ import "./Game.scss";
 import qs from "qs";
 import socket from "./GameSocket";
 import CharacterList from "./CharacterList";
+import RoundArea from "./RoundArea";
 //import axios from "axios";
 
 const Game = ({ location, history }) => {
@@ -26,11 +27,13 @@ const Game = ({ location, history }) => {
   const [msg, setMsg] = useState("");
 
   const [userList,setUserList]=useState([]);
+  const [mainRound,setMainRound]=useState([]);
+  const [subRound,setSubRound]=useState([]);
 
   const { GameSocket, client } = socket;
   window.addEventListener('DOMContentLoaded', function(){
     console.log('DOMContentLoaded');
-    GameSocket(roomId,userList,setUserList,turnNumber);
+    GameSocket(roomId,userList,setUserList,turnNumber,setMainRound,setSubRound);
 })
 
   const rule = query.rule;
@@ -146,7 +149,9 @@ const Game = ({ location, history }) => {
           </div>
         </div>
         <div className="lower">
-          <div className="situation"></div>
+          <div className="situation">
+            <RoundArea mainRound={mainRound} subRound={subRound}/>
+          </div>
           <div className="game-button-area">
             <button onClick={()=>{expeditionWin(0)}} className="game-button">성공</button>
             <button onClick={expeditionAgree} className="game-button">찬성</button>

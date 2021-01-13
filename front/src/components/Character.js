@@ -60,18 +60,24 @@ const Character = ({client,userId,image,check}) => {
     const onClick=()=>{
         const nowTurnId=window.sessionStorage.getItem("nowTurnId");
         const state=window.sessionStorage.getItem("state");
+        
         console.log(`${nowTurnId}`)
         console.log(state)
-        if(state==='Choice'){
-            
+        const roomId=window.sessionStorage.getItem("roomId")
+        if(state==='Choice'){            
         if(nowTurnId!==null){
             if(nowTurnId===myId){
-                const roomId=window.sessionStorage.getItem("roomId")
+                
                 client.send("/app/choice",{},JSON.stringify({choiceId:userId,userId:myId,roomId:roomId}))
             }
         }
         }
-        
+        else if(state==='AssassinChoice'){
+            if(nowTurnId===myId){
+                client.send("/app/kill",{},JSON.stringify({choiceId:userId,userId:myId,roomId:roomId}))
+                window.sessionStorage.setItem("state","end");
+            }           
+        }
         //setClicked(!clicked)
     }
 
