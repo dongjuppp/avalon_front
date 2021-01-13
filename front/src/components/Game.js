@@ -153,7 +153,7 @@ const Game = ({ location, history }) => {
             <RoundArea mainRound={mainRound} subRound={subRound}/>
           </div>
           <div className="game-button-area">
-            <button onClick={()=>{expeditionWin(0)}} className="game-button">성공</button>
+          <button onClick={()=>{expeditionWin(0)}} className="game-button beauti">성공</button>
             <button onClick={expeditionAgree} className="game-button">찬성</button>
             <button onClick={start} className="game-button">시작/확정</button>
             <button onClick={()=>{expeditionWin(1)}} className="game-button">실패</button>

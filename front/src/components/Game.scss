@@ -153,11 +153,18 @@ body {
         height: 48%;
         margin: 1px;
         font-size: 35px;
-
+        cursor: pointer;
+        background-color: gray;
+        
         @media screen and (max-width: 768px) {
           font-size: 20px;
         }
       }
+      .game-button:hover{
+        color:#fff;
+          
+      }
+      
     }
 
     @media screen and (max-width: 768px) {
