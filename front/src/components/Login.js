@@ -42,6 +42,12 @@ const Login = ({history}) => {
         }
     }
 
+    const pressEnter=(e)=>{
+        if(e.key==='Enter'){
+            postLogin()
+        }
+    }
+
   return (
     <div className='login-box'>
       <div className="from-box">
@@ -54,7 +60,7 @@ const Login = ({history}) => {
             </div>
             <div className='form-group'>
                 <div><label><b>PassWord </b></label></div>
-                <input type='password' value={pwd} onChange={(e)=>{setPwd(e.target.value)}}/>
+                <input type='password' value={pwd} onKeyPress={pressEnter} onChange={(e)=>{setPwd(e.target.value)}}/>
             </div>
 
             <div className='button-area'>
