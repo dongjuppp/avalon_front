@@ -1,6 +1,7 @@
 import Stomp from "stompjs";
 import SockJs from "sockjs-client";
 
+//const client = Stomp.over(new SockJs("http://back:8080/websocket"));
 const client = Stomp.over(new SockJs("http://localhost:8080/websocket"));
 client.debug = null;
 const userId = window.sessionStorage.getItem("userInfo");
@@ -16,7 +17,8 @@ const printMsg = (msg, color = "black") => {
 };
 
 const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSubRound) => {
-  console.log("게임 소캣 실행");
+  console.log(`호스트 네임은: ${window.location.hostname} 호스트는:${window.location.host}`)
+  console.log("게임 소캣 실행~~띠!");
   client.connect({}, function (frame) {
     console.log("커넥트 실행");
     client.subscribe("/topic/chatting/" + roomId, function (data) {
