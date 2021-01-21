@@ -1,7 +1,7 @@
 import Stomp from "stompjs";
 import SockJs from "sockjs-client";
 
-//const client = Stomp.over(new SockJs("http://13.124.172.205:8080/websocket")); //이게 맞는듯
+//const client = Stomp.over(new SockJs("http://back/websocket")); //이게 맞는듯
 
 const client = Stomp.over(new SockJs("http://localhost:8080/websocket"));
 client.debug = null;
@@ -19,6 +19,7 @@ const printMsg = (msg, color = "black") => {
 
 const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSubRound) => {
   console.log(client)
+  console.log('local!!!')
   client.connect({}, function (frame) {
     console.log("커넥트 실행");
     client.subscribe("/topic/chatting/" + roomId, function (data) {
@@ -186,6 +187,9 @@ const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSub
     );
 
     
+  },function errorCallback(params) {
+    console.log('error callback back:8080')
+    console.log(params);
   });
 };
 
