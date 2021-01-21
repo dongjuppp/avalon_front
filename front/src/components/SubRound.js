@@ -3,7 +3,7 @@ import suc from '../img/suc.png';
 import fa from '../img/fa.png';
 
 const SubRound = (info) => {
-    console.log(info)
+    
     let image=suc
     if(info.info===0){
         image=fa;
