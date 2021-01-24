@@ -3,6 +3,7 @@ import SockJs from "sockjs-client";
 
 //const client = Stomp.over(new SockJs("http://back/websocket")); //이게 맞는듯
 
+//const client = Stomp.over(new SockJs("http://http://13.124.172.205:8080/websocket"));
 const client = Stomp.over(new SockJs("http://localhost:8080/websocket"));
 client.debug = null;
 const userId = window.sessionStorage.getItem("userInfo");
