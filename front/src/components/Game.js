@@ -44,7 +44,7 @@ const Game = ({ location, history }) => {
     );
   });
 
-  const rule = query.rule;
+  const rule = useMemo(()=>{return query.rule;},[query]);
 
   const exit = useCallback(() => {
     client.send(
@@ -54,11 +54,10 @@ const Game = ({ location, history }) => {
     );
   }, [userId, roomId, client]);
 
-  const start = () => {
+  const start = useCallback(() => {
     const confirm = window.sessionStorage.getItem("state");
     const nowTurnId = window.sessionStorage.getItem("nowTurnId");
-    console.log(confirm);
-    console.log(nowTurnId);
+    
     if (confirm === "Init")
       //시작전
       client.send(
@@ -91,7 +90,7 @@ const Game = ({ location, history }) => {
         JSON.stringify({ roomId: roomId, userId: userId })
       );
     }
-  };
+  },[client,roomId,rule,userId]);
 
   //원정 성공/실패
   const expeditionWin = useCallback(

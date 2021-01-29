@@ -10,11 +10,17 @@ const SignUp = ({history}) => {
 
     const [pwd,setPwd]=useState('');
 
+    const [pwdValidation,setPwdValidation]=useState('');
+
     const [name,setName]=useState('');
 
     const [msg,setMsg]=useState('');
 
     const sign= async ()=>{
+        if(pwd!==pwdValidation){
+            setMsg(<div>비밀번호가 일치하지 않습니다</div>)
+            return;
+        }
         const response = await axios.post('/signup',{
             id:id,
             pwd:pwd,
@@ -47,6 +53,10 @@ const SignUp = ({history}) => {
             <div className='form-group'>
                 <div><label><b>PassWord </b></label></div>
                 <input type='password' value={pwd} onChange={(e)=>{setPwd(e.target.value)}}/>
+            </div>
+            <div className='form-group'>
+                <div><label><b>PassWord Check</b></label></div>
+                <input type='password' value={pwdValidation} onChange={(e)=>{setPwdValidation(e.target.value)}}/>
             </div>
             <div className='form-group'>
                 <div><label><b>name </b></label></div>
