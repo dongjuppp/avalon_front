@@ -5,6 +5,7 @@ import socket from "./GameSocket";
 import CharacterList from "./CharacterList";
 import RoundArea from "./RoundArea";
 import Chatting from "./Chatting";
+import Loading from "./Loading";
 //import axios from "axios";
 
 const Game = ({ location, history }) => {
@@ -30,6 +31,7 @@ const Game = ({ location, history }) => {
   const [userList, setUserList] = useState([]);
   const [mainRound, setMainRound] = useState([]);
   const [subRound, setSubRound] = useState([]);
+  const [isLoading,setIsLoading]=useState(true);
 
   const { GameSocket, client } = socket;
   window.addEventListener("DOMContentLoaded", function () {
@@ -40,7 +42,8 @@ const Game = ({ location, history }) => {
       setUserList,
       turnNumber,
       setMainRound,
-      setSubRound
+      setSubRound,
+      setIsLoading
     );
   });
 
@@ -66,7 +69,7 @@ const Game = ({ location, history }) => {
         JSON.stringify({ roomId: roomId, userId: userId, rule: rule })
       );
     else if (confirm === "Choice") {
-      //원정대 인원선정
+      //원정대 인원선정 완료시
       if (nowTurnId === userId)
         client.send(
           "/app/expeditionMemberFull",
@@ -144,55 +147,53 @@ const Game = ({ location, history }) => {
     }
   }, [client, userId, roomId]);
 
-  return (
-    <>
-      <div style={{ display: "none" }}>{sign}</div>
-      <div className="game">
-        <div className="upper">
-          <div className="character-box">
-            <CharacterList client={client} userList={userList} />
-          </div>
-
-          <Chatting userId={userId} roomId={roomId} client={client} />
-        </div>
-        <div className="lower">
-          <div className="situation">
-            <RoundArea mainRound={mainRound} subRound={subRound} />
-          </div>
-          <div className="game-button-area">
-            <button
-              onClick={() => {
-                expeditionWin(0);
-              }}
-              className="game-button beauti"
-            >
-              성공
-            </button>
-            <button onClick={expeditionAgree} className="game-button">
-              찬성
-            </button>
-            <button onClick={start} className="game-button">
-              시작/확정
-            </button>
-            <button
-              onClick={() => {
-                expeditionWin(1);
-              }}
-              className="game-button"
-            >
-              실패
-            </button>
-            <button onClick={expeditionDisAgree} className="game-button">
-              반대
-            </button>
-            <button onClick={exit} className="game-button">
-              나가기
-            </button>
-          </div>
-        </div>
+  return isLoading ? <Loading/>: <>
+  <div style={{ display: "none" }}>{sign}</div>
+  <div className="game">
+    <div className="upper">
+      <div className="character-box">
+        <CharacterList client={client} userList={userList} turn={turnNumber} />
       </div>
-    </>
-  );
+
+      <Chatting userId={userId} roomId={roomId} client={client} />
+    </div>
+    <div className="lower">
+      <div className="situation">
+        <RoundArea mainRound={mainRound} subRound={subRound} />
+      </div>
+      <div className="game-button-area">
+        <button
+          onClick={() => {
+            expeditionWin(0);
+          }}
+          className="game-button beauti"
+        >
+          성공
+        </button>
+        <button onClick={expeditionAgree} className="game-button">
+          찬성
+        </button>
+        <button onClick={start} className="game-button">
+          시작/확정
+        </button>
+        <button
+          onClick={() => {
+            expeditionWin(1);
+          }}
+          className="game-button"
+        >
+          실패
+        </button>
+        <button onClick={expeditionDisAgree} className="game-button">
+          반대
+        </button>
+        <button onClick={exit} className="game-button">
+          나가기
+        </button>
+      </div>
+    </div>
+  </div>
+</>
 };
 
 export default Game;

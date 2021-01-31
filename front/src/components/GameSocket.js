@@ -3,8 +3,9 @@ import SockJs from "sockjs-client";
 
 //const client = Stomp.over(new SockJs("http://back/websocket")); //이게 맞는듯
 
-//const client = Stomp.over(new SockJs("http://http://13.124.172.205:8080/websocket"));
-const client = Stomp.over(new SockJs("http://localhost:8080/websocket"));
+const client = Stomp.over(new SockJs("/websocket"));
+//const client = Stomp.over(new SockJs("http://221.148.155.39:8080/websocket"));
+//http://221.148.155.39:3000/
 client.debug = null;
 const userId = window.sessionStorage.getItem("userInfo");
 
@@ -18,11 +19,12 @@ const printMsg = (msg, color = "black") => {
   scrollingElement.scrollTop = scrollingElement.scrollHeight;
 };
 
-const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSubRound) => {
+const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSubRound,setIsLoading) => {
   console.log(client)
   console.log('local!!!')
   client.connect({}, function (frame) {
-    console.log("커넥트 실행");
+    console.log(frame);
+    setIsLoading(false);
     client.subscribe("/topic/chatting/" + roomId, function (data) {
       //console.log("메세지 소켓 실행");
       printMsg(data.body, "black");
@@ -68,7 +70,10 @@ const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSub
       if(res.result===1){
         window.sessionStorage.setItem('state','Expedition'); //원정대 출발
       }
-      else window.sessionStorage.setItem('state','Choice'); //원정대 다시 선정
+      else{
+        window.sessionStorage.setItem('state','Choice'); //원정대 다시 선정
+        //turnNumber.current++
+      }
     })
 
     client.subscribe("/topic/voteWinLose/"+roomId,function (data){
@@ -79,6 +84,7 @@ const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSub
     client.subscribe("/topic/expeditionEnd/"+roomId,function (data){
       const res=data.body;
       window.sessionStorage.setItem('state','Choice')
+      //turnNumber.current++
       printMsg(res,'red');
     })
 

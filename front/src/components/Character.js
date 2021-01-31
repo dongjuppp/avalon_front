@@ -84,12 +84,12 @@ const Character = ({client,userId,image,check}) => {
     let show=<div className='character'>
     <img onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
     <div className='identity'>{userId}</div>
-</div> 
+    </div> 
 
     const showClick=<div className='character'>
     <img onClick={onClick} src={change(image)} alt='이미지 불러오지 못함'/>
     <div style={turn} className='identity'>{userId}</div>
-</div> 
+    </div> 
 
     if(check===null){
         return <div className='character'>

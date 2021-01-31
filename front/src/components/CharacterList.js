@@ -7,6 +7,8 @@ const CharacterList = (list) => {
     if(!list.userList){
         return null;
     }
+
+    console.log(list)
     
     return (
         <>
