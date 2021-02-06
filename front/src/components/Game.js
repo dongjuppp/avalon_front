@@ -38,9 +38,7 @@ const Game = ({ location, history }) => {
     console.log("DOMContentLoaded");
     GameSocket(
       roomId,
-      userList,
       setUserList,
-      turnNumber,
       setMainRound,
       setSubRound,
       setIsLoading

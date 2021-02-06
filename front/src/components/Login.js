@@ -25,14 +25,6 @@ const Login = ({history}) => {
                 id:id,
                 pwd:pwd
             })
-            console.log(`응답은: ${response.data}`)
-
-            // if(response.data==='success'){
-            //     window.sessionStorage.setItem('userInfo',id)
-            //     console.log('로비로이동!')
-            //     history.push('/lobby')
-            // }
-
             if(response.data==='fail'){
                 setMsg(<div>아이디 혹은 비밀번호가 틀렸습니다</div>)
             }

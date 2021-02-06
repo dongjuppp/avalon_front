@@ -1,11 +1,9 @@
 import Stomp from "stompjs";
 import SockJs from "sockjs-client";
 
-//const client = Stomp.over(new SockJs("http://back/websocket")); //이게 맞는듯
 
 const client = Stomp.over(new SockJs("/websocket"));
-//const client = Stomp.over(new SockJs("http://221.148.155.39:8080/websocket"));
-//http://221.148.155.39:3000/
+
 client.debug = null;
 const userId = window.sessionStorage.getItem("userInfo");
 
@@ -19,14 +17,10 @@ const printMsg = (msg, color = "black") => {
   scrollingElement.scrollTop = scrollingElement.scrollHeight;
 };
 
-const GameSocket = (roomId, userList, setUserList,turnNumber,setMainround,setSubRound,setIsLoading) => {
-  console.log(client)
-  console.log('local!!!')
+const GameSocket = (roomId, setUserList,setMainround,setSubRound,setIsLoading) => {
   client.connect({}, function (frame) {
-    console.log(frame);
     setIsLoading(false);
     client.subscribe("/topic/chatting/" + roomId, function (data) {
-      //console.log("메세지 소켓 실행");
       printMsg(data.body, "black");
     });
 
