@@ -31,13 +31,25 @@
         .form-group{
             margin-bottom: 15px;
             //position: relative;
-            text-align: center;
-            
+            text-align: center;            
             input{
                 width: 100%;
                 height: 30px;
                 border-radius: 60px;
                 font-size: 25px;
+            }
+
+            // .validation_input{
+            //     width: 70%;
+            //     height: 30px;
+            //     border-radius: 60px;
+            //     font-size: 25px;
+            // }
+            button{
+                width:100%;
+                height: 30px;
+                border-radius: 60px;
+                margin-top: 15px;
             }
 
             label{
