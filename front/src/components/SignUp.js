@@ -60,6 +60,12 @@ const SignUp = ({ history }) => {
       if (response.data === "id_duplication") {
         setMsg(<div>아이디가 중복됩니다</div>);
       }
+      if(response.data==="emailFail"){
+        setMsg(<div>이메일 서비스가 실패했습니다</div>)
+      }
+      if(response.data===null){
+        setMsg(<div>>서버와의 통신에 실패했습니다</div>)
+      }
       const data=response.data.split('/');
       if (data[0] === "success") {
           setValid(true);
