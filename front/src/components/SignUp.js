@@ -53,6 +53,9 @@ const SignUp = ({ history }) => {
         pwd: pwd,
         name: name,
       });
+      if(response.data==="inputError"){
+        setMsg(<div>양식에 어긋납니다</div>);
+      }
       if (response.data === "name_duplication") {
         setMsg(<div>닉네임이 중복됩니다</div>);
       }
@@ -64,7 +67,7 @@ const SignUp = ({ history }) => {
         setMsg(<div>이메일 서비스가 실패했습니다</div>)
       }
       if(response.data===null){
-        setMsg(<div>>서버와의 통신에 실패했습니다</div>)
+        setMsg(<div>서버와의 통신에 실패했습니다</div>)
       }
       const data=response.data.split('/');
       if (data[0] === "success") {
